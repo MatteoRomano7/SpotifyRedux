@@ -1,11 +1,11 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { reducerCases } from "../utils/Constants";
-import { useStateProvider } from "../utils/StateProvider";
+import axios from "axios"
+import React, { useEffect } from "react"
+import styled from "styled-components"
+import { reducerCases } from "../utils/Constants"
+import { useStateProvider } from "../utils/StateProvider"
 
 export default function Playlists() {
-  const [{ token, playlists }, dispatch] = useStateProvider();
+  const [{ token, playlists }, dispatch] = useStateProvider()
   useEffect(() => {
     const getPlaylistData = async () => {
       const response = await axios.get(
@@ -16,18 +16,18 @@ export default function Playlists() {
             "Content-Type": "application/json",
           },
         }
-      );
-      const { items } = response.data;
+      )
+      const { items } = response.data
       const playlists = items.map(({ name, id }) => {
-        return { name, id };
-      });
-      dispatch({ type: reducerCases.SET_PLAYLISTS, playlists });
-    };
-    getPlaylistData();
-  }, [token, dispatch]);
+        return { name, id }
+      })
+      dispatch({ type: reducerCases.SET_PLAYLISTS, playlists })
+    }
+    getPlaylistData()
+  }, [token, dispatch])
   const changeCurrentPlaylist = (selectedPlaylistId) => {
-    dispatch({ type: reducerCases.SET_PLAYLIST_ID, selectedPlaylistId });
-  };
+    dispatch({ type: reducerCases.SET_PLAYLIST_ID, selectedPlaylistId })
+  }
   return (
     <Container>
       <ul>
@@ -36,11 +36,11 @@ export default function Playlists() {
             <li key={id} onClick={() => changeCurrentPlaylist(id)}>
               {name}
             </li>
-          );
+          )
         })}
       </ul>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -70,4 +70,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

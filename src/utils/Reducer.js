@@ -8,6 +8,7 @@ export const initialState = {
   playerState: false,
   selectedPlaylist: null,
   selectedPlaylistId: "3z9BoYFsLaWal4jdXrOMkZ",
+  likedTracks: [" "],
 }
 
 const reducer = (state, action) => {
@@ -46,6 +47,17 @@ const reducer = (state, action) => {
       return {
         ...state,
         selectedPlaylistId: action.selectedPlaylistId,
+      }
+    case reducerCases.ADD_LIKE:
+      return {
+        ...state,
+        likedTracks: [...state.likedTracks, action.trackId],
+      }
+    case reducerCases.REMOVE_LIKE:
+      console.log("Removing like for trackId:", action.trackId)
+      return {
+        ...state,
+        likedTracks: state.likedTracks.filter((id) => id !== action.trackId),
       }
     default:
       return state

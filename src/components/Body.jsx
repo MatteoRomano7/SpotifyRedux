@@ -1,12 +1,23 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { useStateProvider } from "../utils/StateProvider";
-import { AiFillClockCircle } from "react-icons/ai";
-import { reducerCases } from "../utils/Constants";
+import axios from "axios"
+import React, { useEffect } from "react"
+import styled from "styled-components"
+import { useStateProvider } from "../utils/StateProvider"
+import { AiFillClockCircle } from "react-icons/ai"
+import { reducerCases } from "../utils/Constants"
 export default function Body({ headerBackground }) {
-  const [{ token, selectedPlaylist, selectedPlaylistId }, dispatch] =
-    useStateProvider();
+  const [
+    { token, selectedPlaylist, selectedPlaylistId, likedTracks },
+    dispatch,
+  ] = useStateProvider()
+
+  const toggleLike = (trackId) => {
+    const isLiked = likedTracks.includes(trackId)
+    const actionType = isLiked
+      ? reducerCases.REMOVE_LIKE
+      : reducerCases.ADD_LIKE
+
+    dispatch({ type: actionType, trackId })
+  }
 
   useEffect(() => {
     const getInitialPlaylist = async () => {
@@ -18,7 +29,7 @@ export default function Body({ headerBackground }) {
             "Content-Type": "application/json",
           },
         }
-      );
+      )
       const selectedPlaylist = {
         id: response.data.id,
         name: response.data.name,
@@ -36,11 +47,11 @@ export default function Body({ headerBackground }) {
           context_uri: track.album.uri,
           track_number: track.track_number,
         })),
-      };
-      dispatch({ type: reducerCases.SET_PLAYLIST, selectedPlaylist });
-    };
-    getInitialPlaylist();
-  }, [token, dispatch, selectedPlaylistId]);
+      }
+      dispatch({ type: reducerCases.SET_PLAYLIST, selectedPlaylist })
+    }
+    getInitialPlaylist()
+  }, [token, dispatch, selectedPlaylistId, likedTracks])
   const playTrack = async (
     id,
     name,
@@ -64,25 +75,25 @@ export default function Body({ headerBackground }) {
           Authorization: "Bearer " + token,
         },
       }
-    );
+    )
     if (response.status === 204) {
       const currentPlaying = {
         id,
         name,
         artists,
         image,
-      };
-      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying });
-      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+      }
+      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying })
+      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true })
     } else {
-      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true })
     }
-  };
+  }
   const msToMinutesAndSeconds = (ms) => {
-    var minutes = Math.floor(ms / 60000);
-    var seconds = ((ms % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-  };
+    var minutes = Math.floor(ms / 60000)
+    var seconds = ((ms % 60000) / 1000).toFixed(0)
+    return minutes + ":" + (seconds < 10 ? "0" : "") + seconds
+  }
   return (
     <Container headerBackground={headerBackground}>
       {selectedPlaylist && (
@@ -129,9 +140,10 @@ export default function Body({ headerBackground }) {
                   },
                   index
                 ) => {
+                  const isLiked = likedTracks.includes(id)
                   return (
                     <div
-                      className="row"
+                      className={`row ${isLiked ? "liked" : ""}`}
                       key={id}
                       onClick={() =>
                         playTrack(
@@ -162,8 +174,21 @@ export default function Body({ headerBackground }) {
                       <div className="col">
                         <span>{msToMinutesAndSeconds(duration)}</span>
                       </div>
+                      <div className="col">
+                        <span
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleLike(id)
+                          }}
+                          className={`heart-icon ${
+                            isLiked ? "liked-icon" : ""
+                          }`}
+                        >
+                          {isLiked ? "❤️" : "🤍"}
+                        </span>
+                      </div>
                     </div>
-                  );
+                  )
                 }
               )}
             </div>
@@ -171,7 +196,7 @@ export default function Body({ headerBackground }) {
         </>
       )}
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -239,7 +264,21 @@ const Container = styled.div`
             flex-direction: column;
           }
         }
+        .row.liked {
+          background-color: #4caf50; /* Colore per le canzoni "Mi Piace" */
+          color: #fff;
+        }
+
+        .heart-icon {
+          color: #dddcdc; /* Colore del cuore quando la canzone non è stata contrassegnata come preferita */
+          cursor: pointer;
+          transition: color 0.3s ease-in-out;
+        }
+
+        .heart-icon.liked-icon {
+          color: #4caf50; /* Colore del cuore quando la canzone è stata contrassegnata come preferita */
+        }
       }
     }
   }
-`;
+`

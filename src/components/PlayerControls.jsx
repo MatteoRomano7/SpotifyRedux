@@ -1,20 +1,20 @@
-import React from "react";
-import styled from "styled-components";
+import React from "react"
+import styled from "styled-components"
 import {
   BsFillPlayCircleFill,
   BsFillPauseCircleFill,
   BsShuffle,
-} from "react-icons/bs";
-import { CgPlayTrackNext, CgPlayTrackPrev } from "react-icons/cg";
-import { FiRepeat } from "react-icons/fi";
-import { useStateProvider } from "../utils/StateProvider";
-import axios from "axios";
-import { reducerCases } from "../utils/Constants";
+} from "react-icons/bs"
+import { CgPlayTrackNext, CgPlayTrackPrev } from "react-icons/cg"
+import { FiRepeat } from "react-icons/fi"
+import { useStateProvider } from "../utils/StateProvider"
+import axios from "axios"
+import { reducerCases } from "../utils/Constants"
 export default function PlayerControls() {
-  const [{ token, playerState }, dispatch] = useStateProvider();
+  const [{ token, playerState }, dispatch] = useStateProvider()
 
   const changeState = async () => {
-    const state = playerState ? "pause" : "play";
+    const state = playerState ? "pause" : "play"
     await axios.put(
       `https://api.spotify.com/v1/me/player/${state}`,
       {},
@@ -24,12 +24,12 @@ export default function PlayerControls() {
           Authorization: "Bearer " + token,
         },
       }
-    );
+    )
     dispatch({
       type: reducerCases.SET_PLAYER_STATE,
       playerState: !playerState,
-    });
-  };
+    })
+  }
   const changeTrack = async (type) => {
     await axios.post(
       `https://api.spotify.com/v1/me/player/${type}`,
@@ -40,8 +40,8 @@ export default function PlayerControls() {
           Authorization: "Bearer " + token,
         },
       }
-    );
-    dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+    )
+    dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true })
     const response1 = await axios.get(
       "https://api.spotify.com/v1/me/player/currently-playing",
       {
@@ -50,19 +50,19 @@ export default function PlayerControls() {
           Authorization: "Bearer " + token,
         },
       }
-    );
+    )
     if (response1.data !== "") {
       const currentPlaying = {
         id: response1.data.item.id,
         name: response1.data.item.name,
         artists: response1.data.item.artists.map((artist) => artist.name),
         image: response1.data.item.album.images[2].url,
-      };
-      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying });
+      }
+      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying })
     } else {
-      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying: null });
+      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying: null })
     }
-  };
+  }
   return (
     <Container>
       <div className="shuffle">
@@ -85,7 +85,7 @@ export default function PlayerControls() {
         <FiRepeat />
       </div>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -110,4 +110,4 @@ const Container = styled.div`
   .state {
     font-size: 2rem;
   }
-`;
+`

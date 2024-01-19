@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import { MdHomeFilled, MdSearch } from "react-icons/md";
-import { IoLibrary } from "react-icons/io5";
-import Playlists from "./Playlists";
+import React from "react"
+import styled from "styled-components"
+import { MdHomeFilled, MdSearch } from "react-icons/md"
+import { IoLibrary } from "react-icons/io5"
+import Playlists from "./Playlists"
 export default function Sidebar() {
   return (
     <Container>
@@ -30,7 +30,7 @@ export default function Sidebar() {
       </div>
       <Playlists />
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -68,4 +68,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

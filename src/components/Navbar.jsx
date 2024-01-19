@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { useStateProvider } from "../utils/StateProvider";
-import { FaSearch } from "react-icons/fa";
-import { CgProfile } from "react-icons/cg";
+import React from "react"
+import styled from "styled-components"
+import { useStateProvider } from "../utils/StateProvider"
+import { FaSearch } from "react-icons/fa"
+import { CgProfile } from "react-icons/cg"
 export default function Navbar({ navBackground }) {
-  const [{ userInfo }] = useStateProvider();
+  const [{ userInfo }] = useStateProvider()
   return (
     <Container navBackground={navBackground}>
       <div className="search__bar">
@@ -18,7 +18,7 @@ export default function Navbar({ navBackground }) {
         </a>
       </div>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -74,4 +74,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`

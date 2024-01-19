@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import { useStateProvider } from "../utils/StateProvider";
-import { reducerCases } from "../utils/Constants";
+import React, { useEffect } from "react"
+import styled from "styled-components"
+import axios from "axios"
+import { useStateProvider } from "../utils/StateProvider"
+import { reducerCases } from "../utils/Constants"
 export default function CurrentTrack() {
-  const [{ token, currentPlaying }, dispatch] = useStateProvider();
+  const [{ token, currentPlaying }, dispatch] = useStateProvider()
   useEffect(() => {
     const getCurrentTrack = async () => {
       const response = await axios.get(
@@ -15,21 +15,21 @@ export default function CurrentTrack() {
             Authorization: "Bearer " + token,
           },
         }
-      );
+      )
       if (response.data !== "") {
         const currentPlaying = {
           id: response.data.item.id,
           name: response.data.item.name,
           artists: response.data.item.artists.map((artist) => artist.name),
           image: response.data.item.album.images[2].url,
-        };
-        dispatch({ type: reducerCases.SET_PLAYING, currentPlaying });
+        }
+        dispatch({ type: reducerCases.SET_PLAYING, currentPlaying })
       } else {
-        dispatch({ type: reducerCases.SET_PLAYING, currentPlaying: null });
+        dispatch({ type: reducerCases.SET_PLAYING, currentPlaying: null })
       }
-    };
-    getCurrentTrack();
-  }, [token, dispatch]);
+    }
+    getCurrentTrack()
+  }, [token, dispatch])
   return (
     <Container>
       {currentPlaying && (
@@ -46,7 +46,7 @@ export default function CurrentTrack() {
         </div>
       )}
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`
@@ -68,4 +68,4 @@ const Container = styled.div`
       }
     }
   }
-`;
+`
