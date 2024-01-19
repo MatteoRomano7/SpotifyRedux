@@ -1,16 +1,61 @@
 import React from "react"
 import styled from "styled-components"
+import axios from "axios"
 import { useStateProvider } from "../utils/StateProvider"
 import { FaSearch } from "react-icons/fa"
 import { CgProfile } from "react-icons/cg"
+import { useState } from "react"
 export default function Navbar({ navBackground }) {
-  const [{ userInfo }] = useStateProvider()
+  const [{ userInfo, token }] = useStateProvider()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [searchResults, setSearchResults] = useState([])
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.spotify.com/v1/search?q=${searchTerm}&type=track,artist`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+
+      // Puoi gestire i risultati della ricerca come desideri
+      setSearchResults(response.data.tracks.items)
+    } catch (error) {
+      console.error("Errore durante la ricerca:", error)
+    }
+  }
   return (
     <Container navBackground={navBackground}>
       <div className="search__bar">
         <FaSearch />
-        <input type="text" placeholder="Artists, songs, or podcasts" />
+        <input
+          type="text"
+          placeholder="Artists, songs, or podcasts"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              handleSearch()
+            }
+          }}
+        />
       </div>
+
+      {searchResults.length > 0 && (
+        <div className="search__results">
+          <h3>Risultati della ricerca:</h3>
+          <ul>
+            {searchResults.map((result) => (
+              <li key={result.id}>{result.name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="avatar">
         <a href={userInfo?.userUrl}>
           <CgProfile />
