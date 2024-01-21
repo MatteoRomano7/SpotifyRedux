@@ -1,4 +1,4 @@
-Clone dell'app Spotify usando React-redux per la gestione delle funzioni principali Tra i componenti aggiuntivi sono stati usati l'API di Spotify, l'API Context e l'add-on "Styled-components" che permette di scrivere il CSS di elemento come sua diretta funzione. 
+Clone dell'app Spotify usando React-redux per la gestione delle funzioni principali. Tra i componenti aggiuntivi sono stati usati l'API di Spotify, l'API Context e l'add-on "Styled-components" che permette di scrivere il CSS di elemento come sua diretta funzione. 
 
 L'app presenta una schermata iniziale di Login come previsto dalla piattaforma Spotify Web Developer e si apre solo su indirizo localhost:3000, altre porte non funzionano perché non previsto.
 
